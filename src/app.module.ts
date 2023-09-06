@@ -10,6 +10,7 @@ import { MediaModule } from './media/media.module'
 import { UserModule } from './user/user.module'
 import { VideoModule } from './video/video.module'
 import { EmailModule } from './email/email.module';
+import { LikeModule } from './like/like.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { EmailModule } from './email/email.module';
     CommentModule,
     MediaModule,
     EmailModule,
+    LikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -5,7 +5,7 @@ export const getTypeOrmConfig = async (
   configService: ConfigService,
 ): Promise<TypeOrmModuleOptions> => ({
   type: 'postgres',
-  host: 'mahmud.db.elephantsql.com',
+  host: configService.get('DB_HOST'),
   username: configService.get('POSTGRES_USER'),
   password: configService.get('POSTGRES_PASSWORD'),
   database: configService.get('POSTGRES_DATABASE'),

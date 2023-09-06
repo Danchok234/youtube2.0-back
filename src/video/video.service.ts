@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { CommentEntity } from 'src/comment/entities/comment.entity'
 import { FindOptionsWhereProperty, ILike, MoreThan, Repository } from 'typeorm'
+import { LikesEntity } from '../like/entities/likes.entity'
 import { VideoDto } from './dto/video.dto'
 import { VideoEntity } from './entities/video.entity'
-import { CommentService } from 'src/comment/comment.service'
-import { CommentEntity } from 'src/comment/entities/comment.entity'
 
 @Injectable()
 export class VideoService{
@@ -12,7 +12,9 @@ export class VideoService{
 		@InjectRepository(VideoEntity)
 		private readonly VideoRepository:Repository<VideoEntity>,
 		@InjectRepository(CommentEntity)
-		private readonly CommentRepository:Repository<CommentEntity>
+		private readonly CommentRepository:Repository<CommentEntity>,
+		@InjectRepository(LikesEntity)
+		private readonly LikesRepository:Repository<LikesEntity>
 	){}
 
 	async getAllVideos(searchTerm?:string){
@@ -40,7 +42,7 @@ export class VideoService{
 					name:true,
 					avatarPath:true,
 					isVerified:true,
-				}
+				},
 			}
 		})
 
@@ -58,6 +60,10 @@ export class VideoService{
 				author:true,
 				comments:{
 					author:true
+				},
+				likes:{
+					toVideo:true,
+					fromChannel:true
 				}
 			},
 			select:{
@@ -74,12 +80,12 @@ export class VideoService{
 					id:true,
 					author:{
 						id:true,
-					name:true,
-					avatarPath:true,
-					subscribersCount:true,
-					isVerified:true,
+						name:true,
+						avatarPath:true,
+						subscribersCount:true,
+						isVerified:true,
 					}
-				}
+				},
 			}
 		})
 		if(!video) throw new NotFoundException("Video isn`t exist")
@@ -120,11 +126,7 @@ export class VideoService{
 		return this.VideoRepository.save(video)
 	}
 
-	async updateLikesCount(videoId:number){
-		const video = await this.getVideoById(videoId)
-		video.likes++
-		return this.VideoRepository.save(video)
-	}
+	
 
 	async getMostPopular(){
 		const videos = await this.VideoRepository.find({

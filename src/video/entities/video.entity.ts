@@ -1,7 +1,8 @@
-import { CommentEntity } from 'src/comment/entities/comment.entity';
-import { UserEntity } from 'src/user/entities/user.entity';
-import { Base } from 'src/utils/base';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { CommentEntity } from 'src/comment/entities/comment.entity'
+import { UserEntity } from 'src/user/entities/user.entity'
+import { Base } from 'src/utils/base'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
+import { LikesEntity } from '../../like/entities/likes.entity'
 
 @Entity('Video')
 export class VideoEntity extends Base {
@@ -12,8 +13,8 @@ export class VideoEntity extends Base {
   @JoinColumn({ name: 'author_id' })
   author: UserEntity;
 
-  @Column({ default: 0 })
-  likes?: number;
+  @Column({name:"likes_count", default:0})
+  likesCount:number;
 
   @Column({ default: 0 })
   views?: number;
@@ -35,4 +36,7 @@ export class VideoEntity extends Base {
 
   @OneToMany(() => CommentEntity, (comment) => comment.video)
   comments: CommentEntity[];
+
+  @OneToMany(()=>LikesEntity, (like)=>like.toVideo)
+  likes?:LikesEntity[];
 }

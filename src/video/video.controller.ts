@@ -57,9 +57,5 @@ export class VideoController{
 		return this.videoService.updateViewsCount(+id)
 	}
 
-	@HttpCode(200)
-	@Patch(`update-likes/:id`)
-	async updateLikes(@Param("id") id:string){
-		return this.videoService.updateLikesCount(+id)
-	}
+	
 }

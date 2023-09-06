@@ -53,6 +53,10 @@ export class UserService {
             videos: true,
           },
         },
+        likes:{
+          toVideo:true,
+          fromChannel:true
+        }
       },
       order: {
         createdAt: 'DESC',
