@@ -6,6 +6,7 @@ import getVideoDurationInSeconds from 'get-video-duration'
 import { VideoEntity } from 'src/video/entities/video.entity'
 import { Repository } from 'typeorm'
 import { IMediaResponse } from './media.interface'
+import {videoDuration} from '@numairawan/video-duration'
 
 @Injectable()
 export class MediaService {
@@ -21,19 +22,20 @@ export class MediaService {
 
     try{
 
-      const duration = await getVideoDurationInSeconds(`${uploadFolder}/${file.originalname}`)
+      const duration = await videoDuration(`${uploadFolder}/${file.originalname}`)
 
       return {
         url: `/uploads/${folder}/${file.originalname}`,
         name: file.originalname,
-        duration
+        duration:duration.seconds
       }
 
     }catch(e){
-
+      console.log('ERROR:', e);
       return {
         url: `/uploads/${folder}/${file.originalname}`,
         name: file.originalname,
+        duration:0
       }
 
     }
